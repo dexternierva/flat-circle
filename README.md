@@ -12,6 +12,34 @@ Flat Circle is being built as a Swiss Army knife for AI engineering work: a prac
 - Includes a custom calculator tool
 - Demonstrates a simple agent loop with tool usage
 - Keeps project dependencies in a dedicated requirements file
+- Retrieval-Augmented Generation (RAG) with vector embeddings
+- Semantic similarity search using cosine distance
+
+## RAG System
+
+Flat Circle includes a lightweight RAG (Retrieval-Augmented Generation) system that enables semantic search over document collections:
+
+- **Embedder**: Converts text into vector embeddings using Hugging Face's sentence-transformers (default: `sentence-transformers/all-MiniLM-L6-v2`)
+- **SimpleVectorStore**: Stores vectors and performs semantic similarity search using cosine distance to find relevant documents
+
+### RAG Usage Example:
+```python
+from chain import Embedder, SimpleVectorStore
+
+# Create embedder and store
+embedder = Embedder()
+store = SimpleVectorStore()
+
+# Add documents
+docs = ["Your document text here", "Another document"]
+for doc in docs:
+    vector = embedder.embed_text(doc)
+    store.add_text(doc, vector)
+
+# Retrieve similar documents
+query_vector = embedder.embed_text("search query")
+results = store.search(query_vector, top_n=2)
+```
 
 ## Project Structure
 
