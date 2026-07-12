@@ -20,7 +20,7 @@ class MiniAgent:
 		tool_strings = "\n".join([f"- {t.name}: {t.description}" for t in self.tools.values()])
 
 		return f"""You are a helpful assistant with access to tools. If you need to use a tool to answer, you MUST respond with a JSON object:
-		{{""tool": "tool_name", "input": "search_query_or_input"}}
+		{{"tool": "tool_name", "input": "search_query_or_input"}}
 
 		Available tools:
 		{tool_strings}

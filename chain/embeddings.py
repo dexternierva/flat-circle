@@ -9,5 +9,4 @@ class Embedder:
 	def embed_text(self, text: str) -> List[float]:
 		"""Calls Hugging Face to get the numerical coordinate for a string."""
 		# This returns a list of about 384 numbers representing the 'meaning'
-		# ~~return self.client.feature_extraction(text)~~
 		return self.client.feature_extraction(text).tolist()
