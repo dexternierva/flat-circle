@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from chain import HuggingFaceModel, Tool, MiniAgent, ConversationMemory
 from chain.embeddings import Embedder
 from chain.vectorstore import SimpleVectorStore
+from chain.loaders import TextLoader
 
 load_dotenv()
 HF_TOKEN = os.getenv("HF_TOKEN", "")
@@ -30,21 +31,16 @@ model = HuggingFaceModel(
 
 # --- PART 2: THE RAG COMPONENT ---
 
-# 1. Initialize the Librarian (Embedder) and the Filinf Cabinet (Store)
+# 1. Initialize the Librarian (Embedder) and the Filing Cabinet (Vector Store)
 embedder = Embedder(token=HF_TOKEN)
 vstore = SimpleVectorStore()
 
-# 2. Add some specific "Private" facts to your library
-private_facts = [
-	"The secret projecct code name is 'Operation Marshmallow'.",
-	"The office coffee machine password is 'Java123'.",
-	"The next team meeting is on October 12th at 2 PM."
-]
-
-print("--- Indexing Library Facts ---")
-for fact in private_facts:
-	vector = embedder.embed_text(fact)
-	vstore.add_text(fact, vector)
+# 2. Load the text document and split it into chunks for embedding
+loader = TextLoader("my_school_notes.txt")
+chunks = loader.load_and_split()
+for chunk in chunks:
+	vector = embedder.embed_text(chunk)
+	vstore.add_text(chunk, vector)
 
 # 3. Define the Search Tool function
 def search_library(query: str):
